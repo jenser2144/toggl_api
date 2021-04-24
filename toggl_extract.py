@@ -45,6 +45,7 @@ class TogglApi():
             dataframe object: Pandas dataframe containing toggl projects data
         
         """
+        # TODO: possibly re-do this to not use pandas?
         projects_data = self.client.get_projects().json()
         projects_df = pd.DataFrame(projects_data)
 
@@ -56,4 +57,30 @@ class TogglApi():
             projects_df[col] = projects_df[col].astype(str)
         
         return projects_df
-    
+
+    def get_toggl_log_data(self, project_id, date_range_list):
+        """Pull toggl data from api
+        
+        Args:
+            project_id (int): List of project id's to pull data from
+            date_range_list (list): List of date range, each item in list is a datetime object.
+                For example: [datetime.date(2019, 1, 1), datetime.date(2019, 12, 31)]
+        
+        Returns:
+            data_list (list): Nested list containing toggl data
+
+        """         
+        data_list = []
+        # api seems to only pull one page at a time - this loops through each page for each project to get results
+        for page in range(1, 100):
+            # grab data from api
+            data = self.client.get_project_times(str(project_id), date_range_list[0], date_range_list[1], extra_params={"page": page})
+            # check if data was pulled
+            if len(data["data"]) > 0:
+                print("Data found!")
+                # append dataframe to df_list to concat down below
+                data_list.append(data["data"])
+            # if no data found, then break loop
+            else:
+                break
+        return data_list
