@@ -44,7 +44,7 @@ for i in range(0, datetime.today().year - base_start_date.year + 1):
 # connect to sqlite database
 conn = sqlite3.connect(join(environ["HOME"], "repos/toggl_api/toggl_api.sqlite"))
 # query toggl_projects table in sqlite database to grab all project id's
-projects_id_df = pd.read_sql("select distinct id from toggl_projects", conn)
+projects_id_df = pd.read_sql("SELECT DISTINCT ID FROM TOGGL_PROJECTS;", conn)
 # pull list of project id's from toggl_projects table in sqlite database
 projects_id_list = projects_id_df.id.tolist()
 
@@ -78,5 +78,6 @@ df_final.loc[df_final.tags == "", "tags"] = np.nan
 # create dur_secs column as the number of seconds between the start and end
 df_final["dur_secs"] = (df_final["end"] - df_final["start"]).astype("timedelta64[s]")
 
+print("Writing data to sqlite table")
 # write the data to the table in sqlite database
 df_final.to_sql("toggl_data", conn, if_exists="replace", index=False)
