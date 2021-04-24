@@ -48,11 +48,6 @@ projects_id_df = pd.read_sql("select distinct id from toggl_projects", conn)
 # pull list of project id's from toggl_projects table in sqlite database
 projects_id_list = projects_id_df.id.tolist()
 
-# test_project_id = projects_id_list[0]
-# test_date_range = date_range_list[0]
-
-# print(toggl_client.get_toggl_log_data(test_project_id, test_date_range))
-
 df_list = []
 # loop through each project_id
 for project in projects_id_list:
