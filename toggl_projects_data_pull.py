@@ -23,7 +23,7 @@ for col in convert_to_string:
     projects_df[col] = projects_df[col].astype(str)
 
 # connect to sqlite database
-conn = sqlite3.connect(join(environ["HOME"], "repos/toggl_api/togg_api.sqlite"))
+conn = sqlite3.connect(join(environ["HOME"], "repos/toggl_api/toggl_api.sqlite"))
 
 # push toggl projects data to sqlite database
 projects_df.to_sql("toggl_projects", conn, if_exists="replace", index=False)
